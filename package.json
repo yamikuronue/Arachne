@@ -19,6 +19,7 @@
   "dependencies": {
     "handlebars": "^4.0.3",
     "hapi": "^9.3.1",
+    "inert": "^3.1.0",
     "sqlite3": "^3.1.0",
     "vision": "^3.0.0"
   }
