@@ -31,9 +31,13 @@ var DAO = {
 
 	},
 
-	get: function(id, callback) {
+	getProduct: function(id, callback) {
 		var stmt = db.prepare("SELECT * FROM products WHERE id=?");
 		stmt.get(id, callback);
+	},
+
+	getAllProducts: function(callback) {
+		db.all("SELECT * FROM products", callback);
 	}
 }
 

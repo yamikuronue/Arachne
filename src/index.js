@@ -50,10 +50,22 @@ server.register([require('vision'), require('inert')], function (err) {
 
 	server.route({
 	    method: 'GET',
+	    path: '/products',
+	    handler: function (request, reply) {
+
+			DAO.getAllProducts(function(err, data) {
+				//TODO: if err, show 404
+				reply.view('productList', {products: data});
+			});
+		}
+	});
+
+	server.route({
+	    method: 'GET',
 	    path: '/products/{id}',
 	    handler: function (request, reply) {
 			//request.params.user
-			DAO.get(request.params.id, function(err, data) {
+			DAO.getProduct(request.params.id, function(err, data) {
 				//TODO: if err, show 404
 				reply.view('product', data);
 			});
