@@ -2,6 +2,9 @@ var Hapi = require('hapi');
 var path = require('path');
 
 var server = new Hapi.Server();
+
+var DAO = require('./DAO.js');
+DAO.init();
 server.connection({ port: 3000 });
 
 
@@ -43,6 +46,18 @@ server.register([require('vision'), require('inert')], function (err) {
             	listing: true
             }
         }
+	});
+
+	server.route({
+	    method: 'GET',
+	    path: '/products/{id}',
+	    handler: function (request, reply) {
+			//request.params.user
+			DAO.get(request.params.id, function(err, data) {
+				//TODO: if err, show 404
+				reply.view('product', data);
+			});
+		}
 	});
 });
 
