@@ -29,6 +29,17 @@ var DAO = {
 			stmt.finalize();
 		});
 
+		db.serialize(function() {
+			db.run("CREATE TABLE users (name TEXT, password TEXT, canAdminUsers INTEGER)");
+
+			//Default product values
+			var stmt = db.prepare("INSERT INTO users(name, password, canAdminUsers) VALUES (?,?,?)");
+			stmt.run("admin",
+				"adminpassword1",
+				"1");
+			stmt.finalize();
+		});
+
 	},
 
 	getProduct: function(id, callback) {
@@ -38,6 +49,26 @@ var DAO = {
 
 	getAllProducts: function(callback) {
 		db.all("SELECT * FROM products", callback);
+	},
+
+	isValidUser: function(username, callback) {
+		db.get("SELECT * FROM users WHERE name='" + username + "'", function(err, row) {
+			if (row) {
+				callback(err, true);
+			} else {
+				callback(err, false);
+			}
+		});
+	},
+
+	checkAuth: function(username, password, callback) {
+		db.get("SELECT * FROM users WHERE name='" + username + "' AND password='" + password +"'", function(err, row) {
+			if (row) {
+				callback(err, true);
+			} else {
+				callback(err, false);
+			}
+		});
 	}
 }
 
