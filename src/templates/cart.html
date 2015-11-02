@@ -1,0 +1,98 @@
+<html>
+<head>
+ 	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Arachne: Home</title>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/readable/bootstrap.min.css">
+
+	<link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+
+{{> header}}
+
+ <div class="container">
+	<div class="row">
+		<h2>Cart summary </h2>
+		<table id="cartSummary">
+			<tr>
+				<th>Product</th>
+				<th>Quantity</th>
+				<th>Price per Item</th>
+				<th>Subtotal</th>
+			</tr>
+			<tr>
+				<td>{{product}}</td>
+				<td>{{quantity}}</td>
+				<td>{{pricePerItem}}</td>
+				<td>{{itemTotal}}</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row"  style="width: 75%; text-align: right">
+		<table id="cartTotals">
+			<tr>
+				<th>Subtotal:</th>
+				<td>${{itemTotal}}</td>
+			</tr>
+			<tr>
+				<th>Shipping:</th>
+				<td>$5</td>
+			</tr>
+			<tr>
+				<th>Total:</th>
+				<td>${{total}}</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="row">
+		<form action="/processCreditCard" method="post">
+			<h3>Shipping information</h3>
+			<label for="name">Name:</label><input type="text" name="name"></input><br/>
+			<label for="add1">Address line 1:</label><input type="text" name="add1"></input><br/>
+			<label for="add2">Address line 2:</label><input type="text" name="add2"></input><br/>
+			<label for="add3">Address line 3:</label><input type="text" name="add3"></input><br/>
+			<label for="city">City:</label><input type="text" name="city"></input>
+			<label for="state">State:</label><input type="text" name="state" size="2"></input>
+			<label for="zip">Zip:</label><input type="number" name="zip" size="2"></input><br/><br>
+			
+			<h3>Credit card data</h3>
+			<select name="cardType">
+				<option value="visa" selected>Visa</option>
+				<option value="amex">American Express</option>
+				<option value="master">MasterCard</option>
+				<option value="discover">MasterCard</option>
+			</select><br/>
+			<label for="card">Number:</label><input type="number" name="card" size="16"></input><br/>
+			<label for="cvv">CVV:</label><input type="number" name="cvv" size="4" length="4"></input><br/>
+			<label for="exp">Expiration:</label><input type="month" name="exp"></input><br/><br/>
+			
+			<input name="product" type="hidden" value="{{product}}">
+			<input name="pricePerItem" type="hidden" value="{{pricePerItem}}">
+			<input name="quantity" type="hidden" value="{{quantity}}">
+			<input name="itemTotal" type="hidden" value="{{itemTotal}}">
+			<input name="total" type="hidden" value="{{total}}">
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+	
+ </div>
+      <footer>
+        <p>&copy; Arachne 2014</p>
+      </footer>
+    </div> <!-- /container -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

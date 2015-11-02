@@ -1,5 +1,6 @@
 var Hapi = require('hapi');
 var path = require('path');
+var moment = require('moment');
 
 var server = new Hapi.Server();
 
@@ -99,6 +100,100 @@ server.register([require('vision'), require('inert')], function (err) {
 				//TODO: if err, show 404
 				reply.view('product', data);
 			});
+		}
+	});
+	
+	server.route({
+		method: 'POST',
+		path: '/checkout',
+		handler: function (request, reply) {
+			var data = {};
+			data.product = request.payload.product;
+			data.pricePerItem = request.payload.pricePerItem;
+			data.quantity = request.payload.quantity;
+			data.itemTotal = data.pricePerItem * data.quantity;
+			data.total = data.itemTotal + 5; //Static shipping charge: $5
+		
+			console.log(data);
+			reply.view('cart', data);	
+		}
+	});
+	
+	server.route({
+		method: 'POST',
+		path: '/processCreditCard',
+		handler: function (request, reply) {
+			var data = {};
+			var valid = true;
+			data.errorMsg = "";
+			
+			//Regex validation patterns
+			var isValidState = /^(?-i:A[LKSZRAEP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$/;
+			var isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+			
+			//Credit cards
+			var isValidVisa = /^4[0-9]{6,}$/;
+			var isValidMastercard = /^5[1-5][0-9]{5,}$/;
+			var isValidAmex = /^3[47][0-9]{5,}$/;
+			var isValidDiscover = /^6(?:011|5[0-9]{2})[0-9]{3,}$/;
+			
+			//Validate address
+			if (!isValidState.test(request.payload.state)) {
+				valid = false;
+				errorMsg += "Invalid state.";
+			}
+			
+			if (!isValidZip.test(request.payload.zip)) {
+				valid = false;
+				errorMsg += "Invalid zip.";
+			}
+			
+			switch (request.payload.cardType) {
+				case "visa":
+					if (!isValidVisa.test(request.payload.card)) {
+						valid = false;
+						errorMsg += "Invalid credit card number";
+					}
+					break;
+				case "amex":
+					if (!isValidVisa.test(request.payload.card)) {
+						valid = false;
+						errorMsg += "Invalid credit card number";
+					}
+					break;
+				case "master":
+					if (!isValidMastercard.test(request.payload.card)) {
+						valid = false;
+						errorMsg += "Invalid credit card number";
+					}
+					break;
+				case "discover":
+					if (!isValidDiscover.test(request.payload.card)) {
+						valid = false;
+						errorMsg += "Invalid credit card number";
+					}
+					break;
+			}
+		
+			//Date is like 1988-06
+			var expDate = moment(request.payload.exp, "MM-YYYY");
+			var currDate = moment();
+			if (expDate.isBefore(currDate)) {
+				valid = false;
+				errorMsg += "Card is expired!";
+			}
+			
+			if (!valid) {
+				data.product = request.payload.product;
+				data.pricePerItem = request.payload.pricePerItem;
+				data.quantity = request.payload.quantity;
+				data.itemTotal = request.payload.itemTotal;
+				data.total = request.payload.total;
+				
+				reply.view('cart', data);
+			} else {
+				reply.view('success', data);
+			}
 		}
 	});
 

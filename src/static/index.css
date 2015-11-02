@@ -1,4 +1,24 @@
 body  {
-		background-image: url('/img/contemporary_china_2.png');
+	background-image: url('/img/contemporary_china_2.png');
     padding-top: 65px; 
+}
+
+table#cartSummary {
+	width: 75%;
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+table#cartSummary th, table#cartSummary td {
+	border: 1px solid black;
+}
+
+table#cartTotals {
+	width: 28%;
+	margin-left: 75%;
+	margin-top: 50px;
+}
+
+table#cartTotals td{
+	text-align: right;
 }

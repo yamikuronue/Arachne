@@ -18,27 +18,15 @@
 
 {{> header}}
 
- <div class="container">
-  <div class="row">
-    <a href="/products"> <-- </a><br/>
-    <div  class="col-md-6">
-      <h2>{{name}}</h2><br/>
-      <img src="/img/{{img}}" width=200> <br>
-      {{info}}<br/>
-    </div>
-    <div  class="col-md-6">
-    <h3>${{price}}</h3>
-      <form action="/checkout" method="post">
-		<input name="product" type="hidden" value="{{name}}">
-		<input name="pricePerItem" type="hidden" value="{{price}}">
-        QTY:<input name="quantity" type="text" size="2" value="1"><br/>
-        <button class="btn btn-default" type="submit">Add to Cart</button>
-      </form>
-    </div>
-      
-  </div>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+      <h2>Thank you </h2>
+	  Your order has been submitted successfully.
+      </div>
 
- </div>
+      <hr>
+
       <footer>
         <p>&copy; Arachne 2014</p>
       </footer>
