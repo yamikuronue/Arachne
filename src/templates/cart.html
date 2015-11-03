@@ -55,6 +55,7 @@
 
 	<div class="row">
 		<form action="/processCreditCard" method="post">
+			<div class="bg-danger">{{errorMsg}}</div>
 			<h3>Shipping information</h3>
 			<label for="name">Name:</label><input type="text" name="name"></input><br/>
 			<label for="add1">Address line 1:</label><input type="text" name="add1"></input><br/>

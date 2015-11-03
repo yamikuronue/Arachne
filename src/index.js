@@ -128,7 +128,7 @@ server.register([require('vision'), require('inert')], function (err) {
 			data.errorMsg = "";
 			
 			//Regex validation patterns
-			var isValidState = /^(?-i:A[LKSZRAEP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$/;
+			var isValidState = /^(A[LKSZRAEP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$/i;
 			var isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
 			
 			//Credit cards
@@ -140,47 +140,47 @@ server.register([require('vision'), require('inert')], function (err) {
 			//Validate address
 			if (!isValidState.test(request.payload.state)) {
 				valid = false;
-				errorMsg += "Invalid state.";
+				data.errorMsg += "Invalid state.";
 			}
 			
 			if (!isValidZip.test(request.payload.zip)) {
 				valid = false;
-				errorMsg += "Invalid zip.";
+				data.errorMsg += "Invalid zip.";
 			}
 			
 			switch (request.payload.cardType) {
 				case "visa":
 					if (!isValidVisa.test(request.payload.card)) {
 						valid = false;
-						errorMsg += "Invalid credit card number";
+						data.errorMsg += "Invalid credit card number";
 					}
 					break;
 				case "amex":
 					if (!isValidVisa.test(request.payload.card)) {
 						valid = false;
-						errorMsg += "Invalid credit card number";
+						data.errorMsg += "Invalid credit card number";
 					}
 					break;
 				case "master":
 					if (!isValidMastercard.test(request.payload.card)) {
 						valid = false;
-						errorMsg += "Invalid credit card number";
+						data.errorMsg += "Invalid credit card number";
 					}
 					break;
 				case "discover":
 					if (!isValidDiscover.test(request.payload.card)) {
 						valid = false;
-						errorMsg += "Invalid credit card number";
+						data.errorMsg += "Invalid credit card number";
 					}
 					break;
 			}
 		
 			//Date is like 1988-06
-			var expDate = moment(request.payload.exp, "MM-YYYY");
+			var expDate = moment(request.payload.exp, "YYYY-MM");
 			var currDate = moment();
 			if (expDate.isBefore(currDate)) {
 				valid = false;
-				errorMsg += "Card is expired!";
+				data.errorMsg += "Card is expired!";
 			}
 			
 			if (!valid) {
