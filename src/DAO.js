@@ -35,8 +35,12 @@ var DAO = {
 			//Default product values
 			var stmt = db.prepare("INSERT INTO users(name, password, canAdminUsers) VALUES (?,?,?)");
 			stmt.run("admin",
-				"adminpassword1",
+				"password",
 				"1");
+				
+			stmt.run("user",
+				"password",
+				"0");
 			stmt.finalize();
 		});
 
@@ -49,6 +53,19 @@ var DAO = {
 
 	getAllProducts: function(callback) {
 		db.all("SELECT * FROM products", callback);
+	},
+	
+	getAllUsers: function(callback) {
+		db.all("SELECT * FROM users WHERE name != 'admin'", callback);
+	},
+	
+	addUser: function(username, password, callback) {
+		console.log("Adding user " + username);
+		db.run("INSERT INTO users(name, password, canAdminUsers) VALUES (?,?,?)", [username, password, "0"], callback);
+	},
+	
+	changePass: function(username, password, callback) {
+		db.run("UPDATE users SET password=? WHERE name=?", [password, username ], callback);
 	},
 
 	isValidUser: function(username, callback) {

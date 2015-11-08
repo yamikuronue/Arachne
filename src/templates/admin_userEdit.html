@@ -4,7 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Arachne: Logged In</title>
+    <title>Arachne: Home</title>
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -18,15 +18,24 @@
 
 {{> header}}
 
-<div class="container">
+ <div class="container">
   <div class="row">
-    <h1>Admin page</h1>
-	<ul>
-		<li> Edit users </li>
-		<li> Edit products </li>
-		<li> Add product </li>
-	</ul>
-  </div>
+  <h1> Users: </h1>
+  <div class="bg-danger">{{msg}}</div>
+   {{#each users}}
+        <h3>{{name}}</h3>
+		<form action="/admin/users/{{name}}" method="post">
+		<b>Password: </b> <input type="text" name="pw" value="{{password}}"><br/>
+		<input type="submit" value="Change Pass">
+		</form>
+      {{/each}}
+	  
+	  <br/>
+	  <form action="/admin/users" method="post">
+		<b>Username: </b> <input name="username" type="text"><br/>
+		<b>Password: </b> <input name="pw" type="text"><br/>
+		<input type="submit" value="Add user">
+	</form>
 
  </div>
       <footer>

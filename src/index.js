@@ -132,10 +132,10 @@ server.register([require('vision'), require('inert')], function (err) {
 			var isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
 			
 			//Credit cards
-			var isValidVisa = /^4[0-9]{6,}$/;
-			var isValidMastercard = /^5[1-5][0-9]{5,}$/;
-			var isValidAmex = /^3[47][0-9]{5,}$/;
-			var isValidDiscover = /^6(?:011|5[0-9]{2})[0-9]{3,}$/;
+			var isValidVisa = /^4[0-9]{12,15}$/;
+			var isValidMastercard = /^5[1-5][0-9]{14}$/;
+			var isValidAmex = /^3[47][0-9]{14}$/;
+			var isValidDiscover = /^6(?:011|5[0-9]{2})[0-9]{12}$/;
 			
 			//Validate address
 			if (!isValidState.test(request.payload.state)) {
@@ -235,6 +235,88 @@ server.register([require('vision'), require('inert')], function (err) {
 	    handler: function (request, reply) {
 
 			reply("Authenticated");
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'GET',
+	    path: '/admin/users',
+	    handler: function (request, reply) {
+			
+			var data = {};
+			DAO.getAllUsers(function(err, users) {
+				if (err) {
+					data.msg = err.toString();
+				};
+				
+				data.users = users;
+				reply.view('admin_userEdit', data);
+			});
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'POST',
+	    path: '/admin/users',
+	    handler: function (request, reply) {
+			
+			var data = {};
+			
+			DAO.addUser(request.payload.username, request.payload.pw, function(err) {
+				DAO.getAllUsers(function(err, users) {
+					if (err) {
+						data.msg = err.toString();
+					};
+					
+					data.users = users;
+					reply.view('admin_userEdit', data);
+				});
+			});
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'POST',
+	    path: '/admin/users/{name}',
+	    handler: function (request, reply) {
+			
+			var data = {};
+			if (request.params.name != "admin") {
+				DAO.changePass(request.params.name, request.payload.pw, function(err) {
+					if (err) {
+						data.msg = err.toString();
+					} else {
+						data.msg = "Password for " + request.params.name + " changed.";
+					};
+					
+					DAO.getAllUsers(function(err, users) {
+						if (err) {
+							data.msg += err.toString();
+						};
+						
+						data.users = users;
+						reply.view('admin_userEdit', data);
+					});
+				});
+			}
 		},
 		config: {
 			auth: {
