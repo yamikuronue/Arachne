@@ -5,34 +5,56 @@ var db = new sqlite3.Database(':memory:');
 var DAO = {
 	init: function() {
 		db.serialize(function() {
-			db.run("CREATE TABLE products (id INTEGER,  name TEXT, info TEXT, price INTEGER, img TEXT)");
+			/* Product images*/
+			db.run("CREATE TABLE images (id INTEGER,  title TEXT, filename TEXT)");
+			//Default images
+			var stmt = db.prepare("INSERT INTO images(id, title, filename) VALUES (?,?,?)");
+			stmt.run("1",
+				"Child with net",
+				"child_with_net.jpg"
+				);
+				
+			stmt.run("2",
+				"Terrerium",
+				"Terrerium.jpg"
+				);
+				
+			stmt.run("3",
+				"Vine leaf",
+				"vine-leaf.jpg"
+				);
+			stmt.finalize();
+			
+			/* Products */
+			db.run("CREATE TABLE products (id INTEGER,  name TEXT, info TEXT, price INTEGER, imgID INTEGER)");
 
 			//Default product values
-			var stmt = db.prepare("INSERT INTO products(id, name, info, price, img) VALUES (?,?,?,?,?)");
+			stmt = db.prepare("INSERT INTO products(id, name, info, price, imgID) VALUES (?,?,?,?,?)");
 			stmt.run("1",
 				"Bug Catching Net",
 				"This beautiful net will help you catch all the butterflies in the world! On clearance!",
 				"25",
-				"child_with_net.jpg");
+				"1");
 			
 			stmt.run("2",
 				"Bug Habitat",
 				"A lovely habitat for the bugs you caught. Best seller!",
 				"25",
-				"Terrerium.jpg");
+				"2");
 
 			stmt.run("3",
 				"Bug Bait",
 				"No bugs to catch? This bait will lure them out of hiding.",
 				"25",
-				"vine-leaf.jpg");
+				"3");
 			stmt.finalize();
 		});
 
+		/* Users*/
 		db.serialize(function() {
 			db.run("CREATE TABLE users (name TEXT, password TEXT, canAdminUsers INTEGER)");
 
-			//Default product values
+			//Default users
 			var stmt = db.prepare("INSERT INTO users(name, password, canAdminUsers) VALUES (?,?,?)");
 			stmt.run("admin",
 				"password",
@@ -46,15 +68,22 @@ var DAO = {
 
 	},
 
+	/* Product functions*/
 	getProduct: function(id, callback) {
-		var stmt = db.prepare("SELECT * FROM products WHERE id=?");
+		var stmt = db.prepare("SELECT products.id, products.name, products.info, products.price, images.filename AS img FROM products INNER JOIN images ON products.imgID = images.id WHERE products.id=?");
 		stmt.get(id, callback);
 	},
 
 	getAllProducts: function(callback) {
+		db.all("SELECT products.id, products.name, products.info, products.price, images.filename AS img FROM products INNER JOIN images ON products.imgID = images.id", callback);
+	},
+	
+	getAllImages: function(callback) {
 		db.all("SELECT * FROM products", callback);
 	},
 	
+	
+	/* User functions*/
 	getAllUsers: function(callback) {
 		db.all("SELECT * FROM users WHERE name != 'admin'", callback);
 	},
