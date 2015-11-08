@@ -82,6 +82,10 @@ var DAO = {
 		db.run("INSERT INTO products(name, info, price, imgID) VALUES (?,?,?,?)", [name, info, price, imageID], callback);
 	},
 	
+	updateProduct: function(id, name, info, price, imageID, callback) {
+		db.run("UPDATE products SET name=?, info=?, price=?, imgID=? WHERE id=?", [name, info, price, imageID, id], callback);
+	},
+	
 	getAllImages: function(callback) {
 		db.all("SELECT * FROM images", callback);
 	},

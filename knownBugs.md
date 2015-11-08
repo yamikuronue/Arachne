@@ -5,6 +5,9 @@ ADMIN
 1. Leaving the password blank grants access to any account
 2. The credentials are in plaintext in the cookie, easily hackable
 3. After editing a user password, attempting to add new users changes the current user's password instead
+4. Oversized images display poorly on product edit screen (like Vine Leaf)
+5. Normal pages do not reflect login state
+6. Imagess page show the "Users" tab as active
 
 PURCHASE FUNNEL
 1. Quantity input allows negative numbers, for a negative subtotal (and a refund?)

@@ -239,8 +239,10 @@ server.register([require('vision'), require('inert')], function (err) {
 	    method: 'GET',
 	    path: '/admin',
 	    handler: function (request, reply) {
-
-			reply("Authenticated");
+			var data = {};
+			data.isHome = true;
+			data.username = request.auth.credentials.username;
+			reply.view('admin_home', data);
 		},
 		config: {
 			auth: {
@@ -256,6 +258,9 @@ server.register([require('vision'), require('inert')], function (err) {
 	    handler: function (request, reply) {
 			
 			var data = {};
+			data.username = request.auth.credentials.username;
+			data.isUsers = true;
+			
 			DAO.getAllUsers(function(err, users) {
 				if (err) {
 					data.msg = err.toString();
@@ -279,6 +284,8 @@ server.register([require('vision'), require('inert')], function (err) {
 	    handler: function (request, reply) {
 			
 			var data = {};
+			data.username = request.auth.credentials.username;
+			data.isUsers = true;
 			
 			DAO.addUser(request.payload.username, request.payload.pw, function(err) {
 				DAO.getAllUsers(function(err, users) {
@@ -305,6 +312,9 @@ server.register([require('vision'), require('inert')], function (err) {
 	    handler: function (request, reply) {
 			
 			var data = {};
+			data.username = request.auth.credentials.username;
+			data.isUsers = true;
+			
 			if (request.params.name != "admin") {
 				DAO.changePass(request.params.name, request.payload.pw, function(err) {
 					if (err) {
@@ -334,10 +344,63 @@ server.register([require('vision'), require('inert')], function (err) {
 	
 	server.route({
 	    method: 'GET',
+	    path: '/admin/products',
+	    handler: function (request, reply) {
+			
+			var data = {};
+			data.username = request.auth.credentials.username;
+			data.isProducts = true;
+			data.msg = "";
+			DAO.getAllProducts(function(err, products) {
+				if (err) {
+					data.msg += err.toString();
+				};
+				
+				data.products = products;
+				DAO.getAllImages(function(err1, images) {
+					if (err1) {
+						data.msg += err.toString();
+					};
+					
+					data.images = images;
+					reply.view('admin_productEdit', data);
+				});
+			});
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'POST',
+	    path: '/admin/products/{id}',
+	    handler: function (request, reply) {
+			DAO.updateProduct(request.params.id, request.payload.name, request.payload.info, request.payload.price, request.payload.image, function(err, products) {
+				if (err) console.log(err);
+				reply.redirect('/admin/products');
+			});
+			
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'GET',
 	    path: '/admin/images',
 	    handler: function (request, reply) {
 			
 			var data = {};
+			data.username = request.auth.credentials.username;
+			data.isUsers = true;
 			DAO.getAllImages(function(err, images) {
 				if (err) {
 					data.msg = err.toString();
@@ -361,7 +424,9 @@ server.register([require('vision'), require('inert')], function (err) {
 	    handler: function (request, reply) {
 			
 			var data = {};
+			data.username = request.auth.credentials.username;
 			data.msg = "";
+			data.isUsers = true;
 			
 			var filename = request.payload.file.hapi.filename;			
 			var path = __dirname + "/img/" + filename;

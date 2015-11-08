@@ -10,15 +10,17 @@
           <a class="navbar-brand" href="/">Arachne</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" action="/login" method="post">
-            <div class="form-group">
-              <input name="username" type="text" placeholder="Username" class="form-control">
-            </div>
-            <div class="form-group">
-              <input name="password" type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+			<ul class="nav navbar-nav">
+				<li {{#if isHome}}class="active"{{/if}}><a href="/admin">Admin Home</a></li>
+				<li {{#if isUsers}}class="active"{{/if}}><a href="/admin/users">Edit Users</a></li>
+				<li {{#if isImages}}class="active"{{/if}}><a href="/admin/images">Edit Images</a></li>
+				<li {{#if isProducts}}class="active"{{/if}}><a href="/admin/products">Edit Products</a></li>
+			  </ul>
+			  
+			<ul class="nav navbar-nav navbar-right">
+				 <li><a href="/admin">Welcome, {{username}}!</a></li>
+			</ul>
+        
         </div><!--/.navbar-collapse -->
       </div>
     </nav>

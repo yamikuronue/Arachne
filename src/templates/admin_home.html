@@ -16,27 +16,18 @@
 </head>
 <body>
 
-{{> header}}
+{{> admin_header}}
 
 <div class="container">
   <div class="row">
     <h1>Admin page</h1>
 	<ul>
-		<li> Edit users </li>
-		<li> Edit products </li>
-		<li> Add product </li>
+		<li><a href="/admin/users">Edit Users</a></li>
+		<li><a href="/admin/images">Edit Images</a></li>
+		<li><a href="/admin/products">Edit Products</a></li>
 	</ul>
   </div>
 
  </div>
-      <footer>
-        <p>&copy; Arachne 2014</p>
-      </footer>
-    </div> <!-- /container -->
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-</body>
-</html>
+ {{> footer}}
