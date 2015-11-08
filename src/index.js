@@ -1,6 +1,7 @@
 var Hapi = require('hapi');
 var path = require('path');
 var moment = require('moment');
+var fs = require('fs');
 
 var server = new Hapi.Server();
 
@@ -48,15 +49,9 @@ server.register([require('vision'), require('inert')], function (err) {
 	    clearInvalid: false, // remove invalid cookies
 	    strictHeader: true // don't allow violations of RFC 6265
 	});
-
-	server.route({
-	    method: 'GET',
-	    path: '/',
-	    handler: function (request, reply) {
-	        reply.view('home');
-	    }
-	});
-
+	
+	/*Static routes*/
+	
 	server.route({
 	    method: 'GET',
 	    path: '/img/{param*}',
@@ -78,6 +73,16 @@ server.register([require('vision'), require('inert')], function (err) {
             }
         }
 	});
+
+	/* Purchase funnel routes*/
+	server.route({
+	    method: 'GET',
+	    path: '/',
+	    handler: function (request, reply) {
+	        reply.view('home');
+	    }
+	});
+
 
 	server.route({
 	    method: 'GET',
@@ -197,6 +202,7 @@ server.register([require('vision'), require('inert')], function (err) {
 		}
 	});
 
+	/*Admin routes*/
 	server.route({
 		method: 'POST',
 		path: '/login',
@@ -322,6 +328,83 @@ server.register([require('vision'), require('inert')], function (err) {
 			auth: {
 				strategy: 'session',
 				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'GET',
+	    path: '/admin/images',
+	    handler: function (request, reply) {
+			
+			var data = {};
+			DAO.getAllImages(function(err, images) {
+				if (err) {
+					data.msg = err.toString();
+				};
+				
+				data.images = images;
+				reply.view('admin_imageEdit', data);
+			});
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'POST',
+	    path: '/admin/images',
+	    handler: function (request, reply) {
+			
+			var data = {};
+			data.msg = "";
+			
+			var filename = request.payload.file.hapi.filename;			
+			var path = __dirname + "/img/" + filename;
+			var file = fs.createWriteStream(path);
+
+			file.on('error', function (err) { 
+				data.msg += err.toString();
+			});
+
+			request.payload.file.pipe(file);
+
+			request.payload.file.on('end', function (err) {
+				if (err) {
+					data.msg += err.toString();
+				};
+				DAO.addImage(request.payload.title, filename, function(err1) {
+					if (err1) {
+						data.msg += err1.toString();
+					};
+						
+					DAO.getAllImages(function(err2, images) {
+						if (err2) {
+							data.msg += err2.toString();
+						};
+						
+						data.images = images;
+						reply.view('admin_imageEdit', data);
+					});
+				});
+			});
+			
+			
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			},
+			 payload: {
+				maxBytes: 209715200,
+				output: 'stream',
+				uploads: __dirname + '/img/',
+				parse: true
 			}
 		}
 	});

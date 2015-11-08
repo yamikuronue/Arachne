@@ -6,7 +6,7 @@ var DAO = {
 	init: function() {
 		db.serialize(function() {
 			/* Product images*/
-			db.run("CREATE TABLE images (id INTEGER,  title TEXT, filename TEXT)");
+			db.run("CREATE TABLE images (id INTEGER PRIMARY KEY,  title TEXT, filename TEXT)");
 			//Default images
 			var stmt = db.prepare("INSERT INTO images(id, title, filename) VALUES (?,?,?)");
 			stmt.run("1",
@@ -26,7 +26,7 @@ var DAO = {
 			stmt.finalize();
 			
 			/* Products */
-			db.run("CREATE TABLE products (id INTEGER,  name TEXT, info TEXT, price INTEGER, imgID INTEGER)");
+			db.run("CREATE TABLE products (id INTEGER PRIMARY KEY,  name TEXT, info TEXT, price INTEGER, imgID INTEGER)");
 
 			//Default product values
 			stmt = db.prepare("INSERT INTO products(id, name, info, price, imgID) VALUES (?,?,?,?,?)");
@@ -78,10 +78,17 @@ var DAO = {
 		db.all("SELECT products.id, products.name, products.info, products.price, images.filename AS img FROM products INNER JOIN images ON products.imgID = images.id", callback);
 	},
 	
-	getAllImages: function(callback) {
-		db.all("SELECT * FROM products", callback);
+	addProduct: function(name, info, price, imageID, callback) {
+		db.run("INSERT INTO products(name, info, price, imgID) VALUES (?,?,?,?)", [name, info, price, imageID], callback);
 	},
 	
+	getAllImages: function(callback) {
+		db.all("SELECT * FROM images", callback);
+	},
+	
+	addImage: function(title, filename, callback) {
+		db.run("INSERT INTO images(title, filename) VALUES (?,?)", [title, filename], callback);
+	},
 	
 	/* User functions*/
 	getAllUsers: function(callback) {
@@ -89,7 +96,6 @@ var DAO = {
 	},
 	
 	addUser: function(username, password, callback) {
-		console.log("Adding user " + username);
 		db.run("INSERT INTO users(name, password, canAdminUsers) VALUES (?,?,?)", [username, password, "0"], callback);
 	},
 	
