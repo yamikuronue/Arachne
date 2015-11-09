@@ -7,7 +7,7 @@ var server = new Hapi.Server();
 
 var DAO = require('./DAO.js');
 DAO.init();
-server.connection({ port: 3000 });
+server.connection({ address: '127.0.0.1', host: 'localhost', port: 3000 });
 
 
 server.register([require('vision'), require('inert')], function (err) {
