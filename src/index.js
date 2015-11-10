@@ -3,11 +3,17 @@ var path = require('path');
 var moment = require('moment');
 var fs = require('fs');
 
+var argv = require('yargs')
+	.describe('p', 'The port to listen on')
+	.alias('p', 'port')
+	.default('p', 3000)
+    .argv;
+
 var server = new Hapi.Server();
 
 var DAO = require('./DAO.js');
 DAO.init();
-server.connection({ address: '127.0.0.1', host: 'localhost', port: 3000 });
+server.connection({ address: '127.0.0.1', host: 'localhost', port: argv.port });
 
 
 server.register([require('vision'), require('inert')], function (err) {

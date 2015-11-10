@@ -1,0 +1,64 @@
+{
+  "apps" : [
+  {
+    // Instance #1
+    "name"        : "arachne_01",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3001"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },{
+    // Instance #2
+    "name"        : "arachne_02",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3002"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },
+   {
+    // Instance #3
+    "name"        : "arachne_03",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3003"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },{
+    // Instance #4
+    "name"        : "arachne_04",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3004"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },
+    {
+    // Instance #5
+    "name"        : "arachne_05",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3005"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },{
+    // Instance #6
+    "name"        : "arachne_06",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3006"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },
+   {
+    // Instance #7
+    "name"        : "arachne_07",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3007"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },{
+    // Instance #8
+    "name"        : "arachne_08",
+    "script"      : "./src/index.js",
+    "args"        : ["-p", "3008"],
+    "watch"       : true,
+    "merge_logs"  : true
+  },
+  ]
+}
