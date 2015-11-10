@@ -377,6 +377,24 @@ server.register([require('vision'), require('inert')], function (err) {
 	
 	server.route({
 	    method: 'POST',
+	    path: '/admin/products',
+	    handler: function (request, reply) {
+			DAO.addProduct(request.payload.name, request.payload.info, request.payload.price, request.payload.image, function(err, products) {
+				if (err) console.log(err);
+				reply.redirect('/admin/products');
+			});
+			
+		},
+		config: {
+			auth: {
+				strategy: 'session',
+				mode: 'required'
+			}
+		}
+	});
+	
+	server.route({
+	    method: 'POST',
 	    path: '/admin/products/{id}',
 	    handler: function (request, reply) {
 			DAO.updateProduct(request.params.id, request.payload.name, request.payload.info, request.payload.price, request.payload.image, function(err, products) {

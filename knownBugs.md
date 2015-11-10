@@ -30,6 +30,7 @@ PURCHASE FUNNEL
 #. No hinting about state abbreviation vs spelled out state
 #. CCV codes can be negative
 #. No max quantity
+#. Fractional quantities are accepted
 
 MISC:
 #. The copyright date is wrong
