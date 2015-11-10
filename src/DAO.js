@@ -23,6 +23,36 @@ var DAO = {
 				"Vine leaf",
 				"vine-leaf.jpg"
 				);
+				
+			stmt.run("4",
+				"Bug on a daisy",
+				"bug.jpg"
+				);
+				
+			stmt.run("5",
+				"Bug on a vine",
+				"bug-on-leaf.jpg"
+				);
+				
+			stmt.run("6",
+				"Butterfly",
+				"butterfly.jpg"
+				);
+				
+			stmt.run("7",
+				"Ladybug",
+				"ladybug.jpg"
+				);
+			
+			stmt.run("8",
+				"Bug on a leaf",
+				"smakryp.jpg"
+				);
+				
+			stmt.run("9",
+				"Woman wearing vegetable",
+				"woman-wearing-vegetable.jpg"
+				);
 			stmt.finalize();
 			
 			/* Products */
