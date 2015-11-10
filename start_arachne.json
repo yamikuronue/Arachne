@@ -64,14 +64,14 @@
     // Instance #9
     "name"        : "arachne_09",
     "script"      : "./src/index.js",
-    "args"        : ["-p", "3007"],
+    "args"        : ["-p", "3009"],
     "watch"       : false,
     "merge_logs"  : true
   },{
     // Instance #10
     "name"        : "arachne_10",
     "script"      : "./src/index.js",
-    "args"        : ["-p", "3008"],
+    "args"        : ["-p", "3010"],
     "watch"       : false,
     "merge_logs"  : true
   }
