@@ -57,6 +57,18 @@
 		text-decoration: none;
 		color: black;
 	}
+
+	@media screen and (max-width: 299px) {
+		i.headerBug {
+			font-size: 2em;
+		}
+	}
+
+	@media screen and (min-width: 300px) {
+		i.headerBug {
+			font-size: 4em;
+		}
+	}
 </style></head>
 
   <body>
@@ -64,7 +76,7 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <i class="fa fa-bug  fa-3x"></i><span class="navbar-brand">Arachne: Choose your Instance</span>
+          <i class="fa fa-bug headerBug"></i><span class="navbar-brand">Arachne: Choose your Instance</span>
         </div>
       </div>
     </nav>
